@@ -16,9 +16,6 @@ def merge(request): #meant to keep conversational context within wit.ai
 		else:
 			entity_name += type_to_merge['value'] #if it is being read at the end of the last variable, don't add a space
 	context[key] = entity_name
-	
-	# else:
-	# 	context[key] = entities[key][0]['value']
 	return context #return all the gucci INFO
 
 def add_class(request): 
