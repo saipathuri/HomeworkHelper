@@ -15,7 +15,7 @@ twilio_number = "+17062252499"
 def send_sms(num, message):
 	client.messages.create(to=num, from_=twilio_number, body=message);
 
-def send_to_wit(message):
+def send_to_wit(phone_number, message):
 	#send message to wit for processing
 	#fill this in after wit skeleton code is completed
 	#for now return generic message
@@ -24,7 +24,8 @@ def send_to_wit(message):
 @app.route("/", methods=['GET', 'POST'])
 def responder():
 	message = request.values.get('Body', None)
-	response = send_to_wit(message)
+	phone_number = request.values.get('From', None)
+	response = send_to_wit(phone_number, message)
 	resp = twilio.twiml.Response()
 	resp.message(response)
 	return str(resp)
