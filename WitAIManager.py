@@ -1,9 +1,11 @@
+
 from wit import Wit
 import calendar
 import datetime
 import manager
 
 access_token = open("wit_token.txt").read().strip()
+
 
 def send(request, response):
     print(response['text'])
@@ -25,7 +27,7 @@ def merge(request): #meant to keep conversational context within wit.ai
 
 def add_class(request): 
 	'''
-	This definition ieant to combine all the information collected from the user. 
+	This definition is meant to combine all the information collected from the user. 
 	This informtion is stored in 'context' and includes the class name of the assignment, the assignment name, and the day it is due.
 	This is printed to the screen
 	'''
