@@ -15,10 +15,15 @@ users = {}
 returns user with the given number
 """
 def get_user(phone_number):
-	return users[phone_number]
+	try:
+		return users[phone_number]
+	except:
+		add_user(phone_number, "temp_pass")
+		return users[phone_number]
 
 def get_assignments_for_user(user):
 	return user.get_assignments()
+
 
 """
 create usere with the given phone number and password
@@ -35,19 +40,23 @@ assignment must be of type assignment
 def add_assignment(phone_number, name, date, course):
 	ass_to_add = assignment()
 	ass_to_add.create_assignment(name, date, course)
-	user = get_user(phone_number)
-	user.add_assignment(ass_to_add)
+	user_to_modify = get_user(phone_number)
+	user_to_modify.add_assignment(ass_to_add)
 
 	#THIS RETURN IS REQUIRED FOR WITAIMANAGER
 	return ass_to_add
 
-
 """
 returns array of assignments that are from the course specified
 """
-def get_assignments_of_course(context):
+def get_assignments_of_course(request):
+	context = request['context']
+	entities = request['entities']
 	phone_number = context['user']
-	course = context['class']
+
+	course = entities['course'][0]['value']
+
+	# course = context['class']
 
 	assignments_in_course = []
 
@@ -59,9 +68,13 @@ def get_assignments_of_course(context):
 
 	return assignments_in_course
 
-def get_assignments_of_type(context):
+def get_assignments_of_type(request):
+	context = request['context']
+	entities = request['entities']
 	phone_number = context['user']
-	name = context['name']
+
+	name = entities['assignment_name'][0]['value']
+	# name = context['assignment_name']
 
 	assignments_of_type = []
 
@@ -73,9 +86,13 @@ def get_assignments_of_type(context):
 
 	return assignments_of_type
 
-def get_assignments_up_to_date(context):
+def get_assignments_up_to_date(request):
+	context = request['context']
+	entities = request['entities']
 	phone_number = context['user']
-	date_obj = assignment().create_date_obj(context['datetime'])
+
+	date_str = entities['datetime'][0]['value']
+	date_obj = assignment().create_date_obj(date_str)
 
 	assignments_on_date = []
 
@@ -87,12 +104,16 @@ def get_assignments_up_to_date(context):
 
 	return assignments_on_date
 
-def get_all_assignments(context):
+def get_all_assignments(request):
+	context = request['context']
+	entities = request['entities']
 	phone_number = context['user']
 	return get_assignments_for_user(get_user(phone_number))
 
 
-def delete_assignment(context):
+def delete_assignment(request):
+	context = request['context']
+	entities = request['entities']
 	phone_number = context['user']
 
 	assignments = get_assignments_for_user(get_user(phone_number))
@@ -111,19 +132,3 @@ def _verify(phone_number, password):
 	user = get_user(phone_number)
 	current_password = user.get_password()
 	return pbkdf2_sha256.verify(password, current_password)
-
-
-"""
-testing conditions
-"""
-add_user("test", "bob")
-add_assignment("test", "test1", "2017-03-03T00:00:00.000-06:00", "history")
-add_assignment("test", "test2", "2017-03-02T00:00:00.000-06:00", "history")
-add_assignment("test", "test3", "2017-03-04T00:00:00.000-06:00", "history")
-test_context = {"user":"test", "datetime":"2017-03-03T00:00:00.000-06:00", 'class':"history", 'name':'test1'}
-test_search = display_assignments_up_to_date(test_context)
-for i in test_search:
-	print i.to_string()
-
-
-
