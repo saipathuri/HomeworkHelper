@@ -2,7 +2,7 @@ from wit import Wit
 import calendar
 import datetime
 
-access_token = open("wit_token.txt").read()
+access_token = open("wit_token.txt").read().strip()
 
 def send(request, response):
     print(response['text'])
