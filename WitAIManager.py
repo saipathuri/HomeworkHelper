@@ -66,6 +66,45 @@ def twilio_input(context, message):
 	return {'resp':stream.getvalue(), 'context': new_context} # This will get the string inside the variable
 
 
+def display_all_assignments(request):
+	context = request['context']
+	assignments = manager.get_all_assignments(context)
+	pretty_response = ''
+	for i in assignments:
+		pretty_response += i.to_string() + "\n"
+	context['pretty_response'] = pretty_response
+	return context
+
+
+def display_assignments_by_class(request):
+	context = request['context']
+	assignments = manager.get_assignments_of_course(context)
+	pretty_response = ''
+	for i in assignments:
+		pretty_response += i.to_string() + "\n"
+	context['pretty_response'] = pretty_response
+	return context
+
+
+def display_assignments_by_type(request):
+	context = request['context']
+	assignments = manager.get_assignments_of_type(context)
+	pretty_response = ''
+	for i in assignments:
+		pretty_response += i.to_string() + "\n"
+	context['pretty_response'] = pretty_response
+	return context
+
+def display_assignments_by_date(request):
+	context = request['context']
+	assignments = manager.get_assignments_of_date(context)
+	pretty_response = ''
+	for i in assignments:
+		pretty_response += i.to_string() + "\n"
+	context['pretty_response'] = pretty_response
+	return context
+
+
 
 actions = {
     'send': send,
