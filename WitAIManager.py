@@ -2,9 +2,11 @@ from wit import Wit
 import calendar
 import datetime
 import manager
+import sys
+import cStringIO
 
 access_token = open("wit_token.txt").read().strip()
-test_number = open("test_number.txt").read().strip()
+# test_number = open("test_number.txt").read().strip()
 
 
 def send(request, response):
@@ -38,9 +40,10 @@ def add_class(request):
 	course = context['class']
 	name =  context['assignment_name']
 	date = context['datetime']
+	phone_number = context['user']
 
-	manager.add_user(test_number, "test_password")
-	manager.add_assignment(test_number, name, date, course)
+	manager.add_user(phone_number, "test_password")
+	manager.add_assignment(phone_number, name, date, course)
 
 	context['datetime'] = beautiful_date(date)
 	return context
@@ -51,13 +54,22 @@ def beautiful_date(date_str):
 	date_str += " " + str(date.day) + ", " + str(date.year)
 	return date_str
 
+def twilio_input(context, message):
+	session_id = context['user']
+	
+	stdout_ = sys.stdout #Keep track of the previous value.
+	stream = cStringIO.StringIO()
+	sys.stdout = stream
+	new_context = client.run_actions(session_id, message, context, max_steps=10)
+	sys.stdout = stdout_ # restore the previous stdout.
+	return {'resp':stream.getvalue(), 'context': new_context} # This will get the string inside the variable
+
+
 
 actions = {
     'send': send,
     'merge': merge,
     'add_class': add_class,
-    'error': error,
 }
 
 client = Wit(access_token=access_token, actions=actions)
-client.interactive()
