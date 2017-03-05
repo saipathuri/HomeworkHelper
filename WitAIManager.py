@@ -139,7 +139,20 @@ def log(message):
 	log_to_write = open('log.txt', 'w')
 	log_to_write.write(logfile)
 	log_to_write.close()
-
+	
+	
+def CreateSentences(EditedTextClass): #definition to generate text. First parameter is the file-path to the .txt file you'll be using to train the model, the second parameter is how many sentences you want out of the markov model.
+	tool = language_check.LanguageTool('en-GB')
+	text = ""
+	for i in range(1): #creates 'NUMSENTENCES' sentence, where NUMSENTENCES is an integer
+		text = EditedTextClass.make_sentence(tries = 1) #this, along with the next while loop, basically just forces the markov model to try an infinite number of times to have SOMETHING come out. 
+		while (text == None):
+			text = EditedTextClass.make_sentence(tries = 1)
+		matches = tool.check(text) #checks the grammar of the generated text
+		text = language_check.correct(text, matches) #corrects any mistakes the grammar checker found in the text
+		print (" ", end = "")
+		print (text, end="")
+		
 actions = {
     'send': send,
     'merge': merge,
