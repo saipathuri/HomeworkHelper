@@ -1,3 +1,11 @@
+import string
+import markovify
+import nltk
+import re
+import language_check
+import random
+import json
+
 class EditedTextClass(POSifiedText):
     def __init__(self, input_text, state_size=3, chain=None, runs=None):
         self.input_text = input_text
