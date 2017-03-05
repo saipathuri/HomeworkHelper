@@ -10,6 +10,7 @@ import markovify
 import nltk
 import re
 import language_check
+import MarkovChainClass as mcc
 
 access_token = os.environ.get('wit_token',open("wit_token.txt").read().strip())
 
@@ -68,7 +69,6 @@ def twilio_input(context, message):
 
 
 def display_all_assignments(request):
-	log("display all: " + str(request))
 	context = request['context']
 	assignments = manager.get_all_assignments(request)
 	pretty_response = ''
@@ -76,8 +76,11 @@ def display_all_assignments(request):
 		for i in assignments:
 			pretty_response += i.to_string() + "\n"
 		context['pretty_response'] = pretty_response
+	elif context.has_key('inspirational_quote'):
+		context
 	else:
 		context['empty'] = True
+	log("display all: " + str(request))
 	return context
 
 
@@ -136,6 +139,13 @@ def clear_context(request):
 	context = {"user":context["user"]}
 	return context
 
+def generate_sentences(request):
+	log("motivational sentence: " + str(request))
+	phone_number = request['context']['user']
+	context = {'user':phone_number}
+	context['inspirational_quote'] = mcc.get_sentence()
+	return context
+
 def log(message):
 	logfile = open('log.txt').read() + "\n"
 	current_time = datetime.datetime.now().time()
@@ -144,22 +154,6 @@ def log(message):
 	log_to_write.write(logfile)
 	log_to_write.close()
 	
-	
-def CreateSentences(EditedTextClass): #definition to generate text. First parameter is the file-path to the .txt file you'll be using to train the model, the second parameter is how many sentences you want out of the markov model.
-	tool = language_check.LanguageTool('en-GB')
-	text = ""
-	for i in range(1): #creates 'NUMSENTENCES' sentence, where NUMSENTENCES is an integer
-		text = EditedTextClass.make_sentence(tries = 1) #this, along with the next while loop, basically just forces the markov model to try an infinite number of times to have SOMETHING come out. 
-		while (text == None):
-			text = EditedTextClass.make_sentence(tries = 1)
-		matches = tool.check(text) #checks the grammar of the generated text
-		text = language_check.correct(text, matches) #corrects any mistakes the grammar checker found in the text
-		print (" ", end = "")
-		print (text, end="")
-
-def generate_sentences(request):
-	context = CreateSentences(NEW_MODEL)
-	return context
 		
 actions = {
     'send': send,

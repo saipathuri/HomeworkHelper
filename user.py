@@ -14,6 +14,7 @@ class user(object):
 
 	def add_assignment(self, assignment_to_add):
 		self.assignments.append(assignment_to_add)
+		self.assignments.sort(key=lambda r: r.get_date())
 
 	def get_assignments(self):
 		return self.assignments

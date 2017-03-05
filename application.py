@@ -7,7 +7,6 @@ import os
 
 application = Flask(__name__)
 
-
 account_sid = os.environ.get('account_sid', open('twilio_sid.txt').read().strip())
 auth_token = os.environ.get('twilio_token',open('twilio_token.txt').read().strip())
 application.secret_key = os.environ.get('secret_key', open('secret_key.txt').read().strip())
