@@ -40,7 +40,7 @@ class EditedTextClass(POSifiedText):
             runs=obj["runs"]
         )
 
-if os.environ.get('AWS_ACCESS_KEY_ID', None):
+if os.environ.get('AWS_ACCESS_KEY_ID', None) not None:
     with open('/tmp/json.txt') as json_file:
         model2_json = json.load(json_file)
 else:
