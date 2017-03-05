@@ -54,9 +54,7 @@ def get_assignments_of_course(request):
 	entities = request['entities']
 	phone_number = context['user']
 
-	course = entities['course'][0]['value']
-
-	# course = context['class']
+	course = context['class']
 
 	assignments_in_course = []
 
@@ -73,8 +71,7 @@ def get_assignments_of_type(request):
 	entities = request['entities']
 	phone_number = context['user']
 
-	name = entities['assignment_name'][0]['value']
-	# name = context['assignment_name']
+	name = context['assignment_name']
 
 	assignments_of_type = []
 
@@ -91,7 +88,7 @@ def get_assignments_up_to_date(request):
 	entities = request['entities']
 	phone_number = context['user']
 
-	date_str = entities['datetime'][0]['value']
+	date_str = context['datetime']
 	date_obj = assignment().create_date_obj(date_str)
 
 	assignments_on_date = []
@@ -113,10 +110,21 @@ def get_all_assignments(request):
 
 def delete_assignment(request):
 	context = request['context']
-	entities = request['entities']
+	course = context['class']
+	name = context['assignment_name']
+	date_str = context['datetime']
+	date_obj = assignment().create_date_obj(date_str)
+
 	phone_number = context['user']
 
 	assignments = get_assignments_for_user(get_user(phone_number))
+	for ass in assignments:
+		if ass.get_course() == course:
+			if ass.get_date() == date_obj:
+				if ass.get_name() == name:
+					assignments.remove(ass)
+					return ass
+
 
 """
 hashes password with sha256 and returns it

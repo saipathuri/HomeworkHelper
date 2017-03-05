@@ -14,7 +14,7 @@ def send(request, response):
     print(response['text'])
 
 def merge(request): #meant to keep conversational context within wit.ai
-	print "log: merge"
+	log("merge: " + str(request))
 
 	context = request['context'] #retrieve previously stored information
 	entities = request['entities'] #retrieve new information
@@ -38,7 +38,7 @@ def add_class(request):
 	This informtion is stored in 'context' and includes the class name of the assignment, the assignment name, and the day it is due.
 	This is printed to the screen
 	'''
-	print "log: adding a class"
+	log("adding a class: " + str(request))
 	context = request['context']
 	course = context['class']
 	name =  context['assignment_name']
@@ -64,51 +64,81 @@ def twilio_input(context, message):
 
 
 def display_all_assignments(request):
-	print "log: display all"
+	log("display all: " + str(request))
 	context = request['context']
 	assignments = manager.get_all_assignments(request)
 	pretty_response = ''
-	for i in assignments:
-		pretty_response += i.to_string() + "\n"
-	context['pretty_response'] = pretty_response
+	if len(assignments) > 0:
+		for i in assignments:
+			pretty_response += i.to_string() + "\n"
+		context['pretty_response'] = pretty_response
+	else:
+		context['empty'] = True
 	return context
 
 
 def display_assignments_by_class(request):
-	print "log: display by class"
+	log("display assignment by class: " + str(request))
 	context = request['context']
 	assignments = manager.get_assignments_of_course(request)
 	pretty_response = ''
-	for i in assignments:
-		pretty_response += i.to_string() + "\n"
-	context['pretty_response'] = pretty_response
+	if(len(assignments) > 0):
+		for i in assignments:
+			pretty_response += i.to_string() + "\n"
+		context['pretty_response'] = pretty_response
+	else:
+		context['empty'] = True
 	return context
 
 
 def display_assignments_by_type(request):
-	print "log: display by type"
+	log("display assignment by type: " + str(request))
 	context = request['context']
 	assignments = manager.get_assignments_of_type(request)
 	pretty_response = ''
-	for i in assignments:
-		pretty_response += i.to_string() + "\n"
-	context['pretty_response'] = pretty_response
+	if(len(assignments) > 0):
+		for i in assignments:
+			pretty_response += i.to_string() + "\n"
+		context['pretty_response'] = pretty_response
+	else:
+		context['empty'] = True
 	return context
 
 def display_assignments_by_date(request):
-	print "log: display by date"
+	log("display assignment by date: " + str(request))
 	context = request['context']
 	assignments = manager.get_assignments_up_to_date(request)
 	pretty_response = ''
-	for i in assignments:
-		pretty_response += i.to_string() + "\n"
-	context['pretty_response'] = pretty_response
+	if(len(assignments) > 0):
+		for i in assignments:
+			pretty_response += i.to_string() + "\n"
+		context['pretty_response'] = pretty_response
+	else:
+		context['empty'] = True
+	return context
+
+def delete_assignment(request):
+	log("delete assignment: " + str(request))
+	context = request['context']
+	if(manager.delete_assignment(request)):
+		context = display_all_assignments(request)
+	else:
+		context['did_not_delete'] = True
 	return context
 
 def clear_context(request):
+	log("cleared context: " + str(request))
 	context = request['context']
 	context = {"user":context["user"]}
 	return context
+
+def log(message):
+	logfile = open('log.txt').read() + "\n"
+	current_time = datetime.datetime.now().time()
+	logfile += (str(current_time) + " : " + message + "\n")
+	log_to_write = open('log.txt', 'w')
+	log_to_write.write(logfile)
+	log_to_write.close()
 
 actions = {
     'send': send,
@@ -119,6 +149,7 @@ actions = {
     'display_assignments_by_type':display_assignments_by_type,
     'display_assignments_by_date':display_assignments_by_date,
     'clear_context':clear_context,
+    'delete_assignment':delete_assignment,
 }
 
 client = Wit(access_token=access_token, actions=actions)
