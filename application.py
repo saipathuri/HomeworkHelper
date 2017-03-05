@@ -2,11 +2,15 @@ from twilio.rest import TwilioRestClient
 from flask import Flask, request, redirect, session
 import twilio.twiml
 import WitAIManager as wit
+import sys
+import os
 
-app = Flask(__name__)
-app.secret_key = open('secret_key.txt').read().strip()
-account_sid = open('twilio_sid.txt').read().strip()
-auth_token = open('twilio_token.txt').read().strip()
+application = Flask(__name__)
+
+
+account_sid = os.environ.get('account_sid', open('twilio_sid.txt').read().strip())
+auth_token = os.environ.get('twilio_token',open('twilio_token.txt').read().strip())
+application.secret_key = os.environ.get('secret_key', open('secret_key.txt').read().strip())
 
 # Find these values at https://twilio.com/user/account
 client = TwilioRestClient(account_sid, auth_token)
@@ -19,10 +23,12 @@ def send_to_wit(context, message):
 	resp = wit.twilio_input(context, message)
 	return resp
 
-@app.route("/", methods=['GET', 'POST'])
+@application.route("/", methods=['GET', 'POST'])
 def responder():
 	message = request.values.get('Body', None)
 	phone_number = request.values.get('From', None)
+
+	# if(message.strip().lower() == "switch_user")
 
 	#get context from session if exists
 	#if it doesn't exist, return context with just phone number
@@ -43,4 +49,4 @@ def responder():
 	return str(resp)
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	application.run(debug=True)

@@ -1,6 +1,6 @@
 env/*
-*.txt
 *.pyc
+*.txt
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

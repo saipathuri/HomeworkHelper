@@ -5,9 +5,9 @@ import manager
 import sys
 import cStringIO
 import logging
+import os
 
-access_token = open("wit_token.txt").read().strip()
-# test_number = open("test_number.txt").read().strip()
+access_token = os.environ.get('wit_token',open("wit_token.txt").read().strip())
 
 
 def send(request, response):
