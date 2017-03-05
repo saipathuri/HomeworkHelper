@@ -1,5 +1,6 @@
 3to2==1.1.1
 appdirs==1.4.2
+boto==2.46.1
 botocore==1.5.19
 click==6.7
 colorama==0.3.7

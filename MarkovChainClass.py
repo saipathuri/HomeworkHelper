@@ -5,6 +5,7 @@ import re
 import language_check
 import random
 import json
+import s3_manager
 
 
 class POSifiedText(markovify.Text):
@@ -38,7 +39,10 @@ class EditedTextClass(POSifiedText):
             chain=markovify.Chain.from_json(obj["chain"]),
             runs=obj["runs"]
         )
-    
+
+if s3_manager.access_key_id:
+    with open('json.txt') as json_file:
+        model2_json = json.load(json_file)
 with open('QuotesJson.txt') as json_file:  
     model2_json = json.load(json_file)
 NEW_MODEL = EditedTextClass.from_json(model2_json)
