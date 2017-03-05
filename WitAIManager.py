@@ -47,6 +47,5 @@ actions = {
     'add_class': add_class,
 }
 
-access_token = "ABPNWDEXGLNGHP6J7VKEZKBZMFHXNJG4";
 client = Wit(access_token=access_token, actions=actions)
 client.interactive()
