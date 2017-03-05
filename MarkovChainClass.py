@@ -39,3 +39,6 @@ class POSifiedText(markovify.Text):
         sentence = " ".join(word.split("::")[0] for word in words)
         return sentence
     
+    
+NEW_MODEL = EditedTextClass.from_json(FILE_PATH_OF_JSON)
+
