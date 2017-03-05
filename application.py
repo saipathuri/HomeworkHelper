@@ -16,8 +16,6 @@ application.secret_key = os.environ.get('secret_key', open('secret_key.txt').rea
 client = TwilioRestClient(account_sid, auth_token)
 twilio_number = "+17062252499"
 
-s3_manager.load()
-
 def send_sms(num, message):
 	client.messages.create(to=num, from_=twilio_number, body=message);
 

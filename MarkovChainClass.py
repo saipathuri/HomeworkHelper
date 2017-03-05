@@ -41,7 +41,7 @@ class EditedTextClass(POSifiedText):
         )
 
 if os.environ.get('AWS_ACCESS_KEY_ID', None):
-    with open('json.txt') as json_file:
+    with open('/tmp/json.txt') as json_file:
         model2_json = json.load(json_file)
 else:
     with open('QuotesJson.txt') as json_file:  

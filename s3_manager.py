@@ -11,4 +11,4 @@ bucket = conn.get_bucket('elasticbeanstalk-us-west-2-404441904824')
 k = Key(bucket)
 k.key = 'QuotesJson.txt'
 
-k.get_contents_to_filename('json.txt')
+k.get_contents_to_filename('/tmp/json.txt')
