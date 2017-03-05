@@ -4,6 +4,7 @@ import datetime
 import manager
 
 access_token = open("wit_token.txt").read().strip()
+test_number = open("test_number.txt").read().strip()
 
 def send(request, response):
     print(response['text'])
@@ -34,8 +35,8 @@ def add_class(request):
 	name =  context['assignment_name']
 	date = context['datetime']
 
-	manager.add_user("+15129946923", "test_password")
-	manager.add_class("+15129946923", name, date, course)
+	manager.add_user(test_number, "test_password")
+	manager.add_assignment(test_number, name, date, course)
 
 	context['datetime'] = beautiful_date(date)
 	return context

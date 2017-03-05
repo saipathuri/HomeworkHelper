@@ -1,5 +1,5 @@
-import user
-import assignment
+from user import user
+from assignment import assignment
 from passlib.hash import pbkdf2_sha256
 
 """
@@ -14,16 +14,14 @@ users = {}
 returns user with the given number
 """
 def get_user(phone_number):
-	try:
-		return users['phone_number']
-	except KeyError:
-		raise Exception("User doesnt exist")
+	return users[phone_number]
 
 """
 create usere with the given phone number and password
 """
 def add_user(phone_number, password):
-	users[phone_number] = user.create_user(phone_number, _hash(password))
+	hashed_password = _hash(password)
+	users[phone_number] = user().initialize_user(phone_number, hashed_password)
 
 
 """
@@ -31,7 +29,7 @@ adds assignment to user with the given phone number
 assignment must be of type assignment
 """
 def add_assignment(phone_number, name, date, course):
-	ass_to_add = assignment.create_assignment(name, date, course)
+	ass_to_add = assignment().create_assignment(name, date, course)
 	user = get_user(phone_number)
 	user.add_assignment(ass_to_add)
 

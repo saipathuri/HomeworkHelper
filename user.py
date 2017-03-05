@@ -7,18 +7,16 @@ class user(object):
 		self.assignments = []
 		self.password = ""
 
-	def create_user(phone_number, password):
+	def initialize_user(self, phone_number, password):
 		self.phone_number = phone_number
 		self.password = password
+		return self
 
-	def add_assignment(assignment):
-		if isinstance(assignment, assignment):
-			self.assignments.append(assignment)
-		else:
-			raise TypeError("Must be of type assignment")
+	def add_assignment(self, assignment_to_add):
+		self.assignments.append(assignment)
 
-	def get_assignments():
+	def get_assignments(self):
 		return self.assignments
 
-	def get_password():
+	def get_password(self):
 		return self.password
