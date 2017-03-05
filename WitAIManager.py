@@ -110,6 +110,10 @@ actions = {
     'send': send,
     'merge': merge,
     'add_class': add_class,
+    'display_all_assignments':display_all_assignments,
+    'display_assignments_by_class': display_assignments_by_class,
+    'display_assignments_by_type':display_assignments_by_type,
+    'display_assignments_by_date':display_assignments_by_date,
 }
 
 client = Wit(access_token=access_token, actions=actions)
