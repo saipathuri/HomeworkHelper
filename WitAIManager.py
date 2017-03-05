@@ -6,6 +6,10 @@ import sys
 import cStringIO
 import logging
 import os
+import markovify
+import nltk
+import re
+import language_check
 
 access_token = os.environ.get('wit_token',open("wit_token.txt").read().strip())
 
