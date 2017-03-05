@@ -3,12 +3,10 @@ from flask import Flask, request, redirect
 import twilio.twiml
 
 app = Flask(__name__)
-sid = open('sid.txt').read()
-token = open('token.txt').read()
+account_sid = open('twilio_sid.txt').read()
+auth_token = open('twilio_token.txt').read()
 
 # Find these values at https://twilio.com/user/account
-account_sid = sid
-auth_token = token
 client = TwilioRestClient(account_sid, auth_token)
 twilio_number = "+17062252499"
 

@@ -1,4 +1,8 @@
 from wit import Wit
+import calendar
+import datetime
+
+access_token = open("wit_token.txt").read()
 
 def send(request, response):
     print(response['text'])
@@ -30,8 +34,15 @@ def add_class(request):
 	context = request['context']
 	print context['class']
 	print context['assignment_name']
+	context['datetime'] = beautiful_date(context['datetime'])
 	print context['datetime']
 	return context
+
+def beautiful_date(date_str):
+	date = datetime.datetime.strptime(date_str.split("T")[0], "%Y-%m-%d").date()
+	date_str = str(calendar.month_name[date.month])
+	date_str += " " + str(date.day) + ", " + str(date.year)
+	return date_str
 
 actions = {
     'send': send,
