@@ -20,5 +20,14 @@ class assignment(object):
 
 	def create_assignment(name, date, course):
 		self.name = name
-		self.date = date
+		self.date = beautiful_date(date)
 		self.course = course
+
+	def to_string():
+		string = self.course + self.name + "due on " + beautiful_date(self.date)
+
+	def beautiful_date(date_str):
+		date = datetime.datetime.strptime(date_str.split("T")[0], "%Y-%m-%d").date()
+		date_str = str(calendar.month_name[date.month])
+		date_str += " " + str(date.day) + ", " + str(date.year)
+		return date_str

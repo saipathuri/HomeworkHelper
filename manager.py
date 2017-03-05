@@ -1,4 +1,5 @@
 import user
+import assignment
 from passlib.hash import pbkdf2_sha256
 
 """
@@ -29,9 +30,10 @@ def add_user(phone_number, password):
 adds assignment to user with the given phone number
 assignment must be of type assignment
 """
-def add_assignment(phone_number, assignment):
+def add_assignment(phone_number, name, date, course):
+	ass_to_add = assignment.create_assignment(name, date, course)
 	user = get_user(phone_number)
-	user.add_assignment(assignment)
+	user.add_assignment(ass_to_add)
 
 """
 hashes password with sha256 and returns it

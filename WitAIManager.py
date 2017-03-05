@@ -1,6 +1,7 @@
 from wit import Wit
 import calendar
 import datetime
+import manager
 
 access_token = open("wit_token.txt").read().strip()
 
@@ -29,10 +30,14 @@ def add_class(request):
 	This is printed to the screen
 	'''
 	context = request['context']
-	print context['class']
-	print context['assignment_name']
-	context['datetime'] = beautiful_date(context['datetime'])
-	print context['datetime']
+	course = context['class']
+	name =  context['assignment_name']
+	date = context['datetime']
+
+	manager.add_user("+15129946923", "test_password")
+	manager.add_class("+15129946923", name, date, course)
+
+	context['datetime'] = beautiful_date(date)
 	return context
 
 def beautiful_date(date_str):
