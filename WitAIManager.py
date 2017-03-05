@@ -156,6 +156,10 @@ def CreateSentences(EditedTextClass): #definition to generate text. First parame
 		text = language_check.correct(text, matches) #corrects any mistakes the grammar checker found in the text
 		print (" ", end = "")
 		print (text, end="")
+
+def generate_sentences(request):
+	context = CreateSentences(NEW_MODEL)
+	return context
 		
 actions = {
     'send': send,
@@ -167,6 +171,7 @@ actions = {
     'display_assignments_by_date':display_assignments_by_date,
     'clear_context':clear_context,
     'delete_assignment':delete_assignment,
+    'generate_sentences':generate_sentences,
 }
 
 client = Wit(access_token=access_token, actions=actions)
