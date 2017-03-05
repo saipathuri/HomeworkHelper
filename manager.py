@@ -1,6 +1,7 @@
 from user import user
 from assignment import assignment
 from passlib.hash import pbkdf2_sha256
+import datetime
 
 """
 users holds all users in the system
@@ -16,6 +17,9 @@ returns user with the given number
 def get_user(phone_number):
 	return users[phone_number]
 
+def get_assignments_for_user(user):
+	return user.get_assignments()
+
 """
 create usere with the given phone number and password
 """
@@ -29,9 +33,69 @@ adds assignment to user with the given phone number
 assignment must be of type assignment
 """
 def add_assignment(phone_number, name, date, course):
-	ass_to_add = assignment().create_assignment(name, date, course)
+	ass_to_add = assignment()
+	ass_to_add.create_assignment(name, date, course)
 	user = get_user(phone_number)
 	user.add_assignment(ass_to_add)
+
+	#THIS RETURN IS REQUIRED FOR WITAIMANAGER
+	return ass_to_add
+
+
+"""
+returns array of assignments that are from the course specified
+"""
+def get_assignments_of_course(context):
+	phone_number = context['user']
+	course = context['class']
+
+	assignments_in_course = []
+
+	assignments = get_assignments_for_user(get_user(phone_number))
+
+	for ass in assignments:
+		if ass.get_course() == course:
+			assignments_in_course.append(ass)
+
+	return assignments_in_course
+
+def get_assignments_of_type(context):
+	phone_number = context['user']
+	name = context['name']
+
+	assignments_of_type = []
+
+	assignments = get_assignments_for_user(get_user(phone_number))
+
+	for ass in assignments:
+		if ass.get_name() == name:
+			assignments_of_type.append(ass)
+
+	return assignments_of_type
+
+def get_assignments_up_to_date(context):
+	phone_number = context['user']
+	date_obj = assignment().create_date_obj(context['datetime'])
+
+	assignments_on_date = []
+
+	assignments = get_assignments_for_user(get_user(phone_number))
+
+	for ass in assignments:
+		if ass.get_date() <= date_obj:
+			assignments_on_date.append(ass)
+
+	return assignments_on_date
+
+def get_all_assignments(context):
+	phone_number = context['user']
+	return get_assignments_for_user(get_user(phone_number))
+
+
+def delete_assignment(context):
+	phone_number = context['user']
+
+	assignments = get_assignments_for_user(get_user(phone_number))
 
 """
 hashes password with sha256 and returns it
@@ -47,3 +111,19 @@ def _verify(phone_number, password):
 	user = get_user(phone_number)
 	current_password = user.get_password()
 	return pbkdf2_sha256.verify(password, current_password)
+
+
+"""
+testing conditions
+"""
+add_user("test", "bob")
+add_assignment("test", "test1", "2017-03-03T00:00:00.000-06:00", "history")
+add_assignment("test", "test2", "2017-03-02T00:00:00.000-06:00", "history")
+add_assignment("test", "test3", "2017-03-04T00:00:00.000-06:00", "history")
+test_context = {"user":"test", "datetime":"2017-03-03T00:00:00.000-06:00", 'class':"history", 'name':'test1'}
+test_search = display_assignments_up_to_date(test_context)
+for i in test_search:
+	print i.to_string()
+
+
+

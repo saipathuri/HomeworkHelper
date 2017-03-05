@@ -13,7 +13,7 @@ class user(object):
 		return self
 
 	def add_assignment(self, assignment_to_add):
-		self.assignments.append(assignment)
+		self.assignments.append(assignment_to_add)
 
 	def get_assignments(self):
 		return self.assignments

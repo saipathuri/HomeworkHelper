@@ -43,9 +43,10 @@ def add_class(request):
 	phone_number = context['user']
 
 	manager.add_user(phone_number, "test_password")
-	manager.add_assignment(phone_number, name, date, course)
+	added_assignment = manager.add_assignment(phone_number, name, date, course)
 
-	context['datetime'] = beautiful_date(date)
+	context['datetime'] = added_assignment.get_pretty_date()
+	# context['datetime'] = beautiful_date(date)
 	return context
 
 def beautiful_date(date_str):
