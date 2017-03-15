@@ -1,7 +1,7 @@
-##Homework Helper
+## Homework Helper
 Text based assignment tracker powered by wit.ai and twilio
 
-##Setup
+## Setup
 
 Run
 ```
@@ -21,7 +21,7 @@ python application.py
 
 Set the endpoint for your Twilio Phone # in your Twilio Control Panel
 
-##Usage
+## Usage
 Text your Twilio Number any variations of the following
 
 + Show all assignments
