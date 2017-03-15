@@ -35,6 +35,6 @@ Text your Twilio Number any variations of the following
 
 ## Contributors
 
-@abhishaike: 95% of the work on wit.ai was done by him and markov (sadly removed :()
+@abhishaike: 95% of the work on wit.ai was done by him and markov (sadly removed :( )
 
 @saipathuri: completed the backend/server
