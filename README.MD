@@ -32,3 +32,9 @@ Text your Twilio Number any variations of the following
 + What is due next week?
 + What is due in [subject]?
 + What is due by [date]?
+
+## Contributors
+
+@abhishaike: 95% of the work on wit.ai was done by him and markov (sadly removed :()
+
+@saipathuri: completed the backend/server
