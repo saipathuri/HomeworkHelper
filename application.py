@@ -4,7 +4,6 @@ import twilio.twiml
 import WitAIManager as wit
 import sys
 import os
-import s3_manager
 
 application = Flask(__name__)
 
@@ -28,25 +27,30 @@ def responder():
 	message = request.values.get('Body', None)
 	phone_number = request.values.get('From', None)
 
-	# if(message.strip().lower() == "switch_user")
+	if(message == "save"):
+		wit.save_to_s3()
+		response_to_user =  'saved data to s3'
+	elif (message == "load"):
+		wit.load_from_s3()
+		response_to_user = 'loaded data from s3'
+	else:
+		#get context from session if exists
+		#if it doesn't exist, return context with just phone number
+		context = session.get('context', {'user': phone_number})
 
-	#get context from session if exists
-	#if it doesn't exist, return context with just phone number
-	context = session.get('context', {'user': phone_number})
+		#send wit the context and message from the user
+		response = send_to_wit(context, message)
 
-	#send wit the context and message from the user
-	response = send_to_wit(context, message)
+		#response is disctionary with 2 elements
+		response_to_user = response['resp']
+		new_context = response['context']
 
-	#response is disctionary with 2 elements
-	response_to_user = response['resp']
-	new_context = response['context']
-
-	#assign twilio context to be new context from wit
-	session['context'] = new_context
+		#assign twilio context to be new context from wit
+		session['context'] = new_context
 
 	resp = twilio.twiml.Response()
 	resp.message(response_to_user)
 	return str(resp)
 
 if __name__ == "__main__":
-	application.run(debug=True)
+	application.run(host='0.0.0.0', debug=True)

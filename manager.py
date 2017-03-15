@@ -2,6 +2,7 @@ from user import user
 from assignment import assignment
 from passlib.hash import pbkdf2_sha256
 import datetime
+import s3_manager
 
 """
 users holds all users in the system
@@ -125,7 +126,11 @@ def delete_assignment(request):
 					assignments.remove(ass)
 					return ass
 
+def backup():
+	s3_manager.save(users)
 
+def load():
+	users = s3_manager.load()
 """
 hashes password with sha256 and returns it
 """

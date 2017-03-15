@@ -6,11 +6,6 @@ import sys
 import cStringIO
 import logging
 import os
-import markovify
-import nltk
-import re
-import language_check
-import MarkovChainClass as mcc
 
 access_token = os.environ.get('wit_token',open("wit_token.txt").read().strip())
 
@@ -57,14 +52,16 @@ def add_class(request):
 	return context
 
 def twilio_input(context, message):
-	session_id = context['user']
+	phone_number = context['user']
+	current_user = manager.get_user(phone_number)
+	session_id = current_user.get_session_id()
 	
 	stdout_ = sys.stdout #Keep track of the previous value.
 	stream = cStringIO.StringIO()
 	sys.stdout = stream
 	new_context = client.run_actions(session_id, message, context, max_steps=10)
 	sys.stdout = stdout_ # restore the previous stdout.
-	print new_context
+	print 'new context =' + str(new_context)
 	return {'resp':stream.getvalue(), 'context': new_context} # This will get the string inside the variable
 
 
@@ -133,9 +130,17 @@ def delete_assignment(request):
 		context['did_not_delete'] = True
 	return context
 
+#clear context, only leaving user phone #
+#also will increment user session counter
 def clear_context(request):
 	log("cleared context: " + str(request))
+
 	context = request['context']
+
+	phone_number = context['user']
+	current_user = manager.get_user(phone_number)
+	current_user.increment_session()
+
 	context = {"user":context["user"]}
 	return context
 
@@ -154,6 +159,11 @@ def log(message):
 	log_to_write.write(logfile)
 	log_to_write.close()
 	
+def save_to_s3():
+	manager.backup()
+
+def load_from_s3():
+	manager.load()
 		
 actions = {
     'send': send,
@@ -165,7 +175,6 @@ actions = {
     'display_assignments_by_date':display_assignments_by_date,
     'clear_context':clear_context,
     'delete_assignment':delete_assignment,
-    'generate_sentences':generate_sentences,
 }
 
 client = Wit(access_token=access_token, actions=actions)

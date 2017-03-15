@@ -11,10 +11,7 @@ httplib2==0.10.3
 itsdangerous==0.24
 Jinja2==2.9.5
 jmespath==0.9.1
-language-check==0.8
-markovify==0.5.4
 MarkupSafe==0.23
-nltk==3.2.2
 packaging==16.8
 passlib==1.7.1
 pyasn1==0.2.3
